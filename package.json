@@ -1,0 +1,13 @@
+{
+    "name": "weather_dashboard",
+    "version": "1.0.0",
+    "scripts": {
+      "build:css": "tailwindcss build assets/css/style.css -o assets/css/output.css"
+    },
+    "dependencies": {
+      "tailwindcss": "^3.0.0",
+      "postcss": "^8.0.0",
+      "autoprefixer": "^10.0.0"
+    }
+  }
+  
