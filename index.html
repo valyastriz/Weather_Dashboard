@@ -11,9 +11,24 @@
     <div class="container">
         <h1 class="bg-cyan-900 text-center text-white p-4 w-screen text-2xl">Weather Dashboard</h1>
     </div>
-    <div class="container border-solid border-2 border-fuchsia-500 p-6 mx-auto">
-        <div class="grid-cols-3 border-solid border-2 border-cyan-800"></div>
-        <div class="border-solid border-2 border-pink-900"></div>
+    <div class="container grid grid-cols-12 border-solid border-2 border-fuchsia-500 p-3 mx-auto">
+        <!--Sidebar-->
+        <div class="col-span-4 md:col-span-3 bg-white border-solid border-2 border-cyan-800">
+            <div class="bg-white p-4">
+                <h2 class="text-lg font-fold mb-4">Search for a City: </h2>
+            </div>
+            <button class="w-full bg-gray-200 py-2 rounded">Test Saved City</button>
+        </div>
+        <div class="col-span-8 border-solid border-2 border-pink-900">
+            <div class="container grid grid-cols-10 border-solid border-2 border-cyan-800 auto-rows-auto">
+                <div class="col-span-10 border-solid border-2 border-cyan-800">Today Card</div>
+                <div class="col-span-2 border-solid border-2 border-cyan-800">Future Card</div>
+                <div class="col-span-2 border-solid border-2 border-cyan-800">Future Card</div>
+                <div class="col-span-2 border-solid border-2 border-cyan-800">Future Card</div>
+                <div class="col-span-2 border-solid border-2 border-cyan-800">Future Card</div>
+                <div class="col-span-2 border-solid border-2 border-cyan-800">Future Card</div>
+            </div>
+        </div>
     </div>
 
     <script src="assets/js/index.js"></script>
