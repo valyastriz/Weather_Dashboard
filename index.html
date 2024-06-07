@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="assets/css/output.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Weather Dashboard</title>
 </head>
-<body class="bg-gray-100 p-6 border-solid">
-    <div>
-        <div class="container bg-cyan-900 text-white p-4">Weather Dashboard</div>
+<body class="bg-gray-100">
+    <div class="container">
+        <h1 class="bg-cyan-900 text-center text-white p-4 w-screen text-2xl">Weather Dashboard</h1>
+    </div>
+    <div class="container border-solid border-2 border-fuchsia-500 p-6 mx-auto">
+        <div class="grid-cols-3 border-solid border-2 border-cyan-800"></div>
+        <div class="border-solid border-2 border-pink-900"></div>
     </div>
 
     <script src="assets/js/index.js"></script>
