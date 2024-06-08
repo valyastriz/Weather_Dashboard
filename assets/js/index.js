@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fiveDay(lat, lon, city) {
         const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
-        const citySearchId = crypto.randonUUID(); //generate an id for each city search
+        const citySearchId = crypto.randomUUID(); //generate an id for each city search
 
         const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         
@@ -141,15 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    //listener for the 'submit' on the city search
-    cityEl.addEventListener('submit', handleSubmit)
-
-    cityClicked.addEventListener('click', function(event){
+    function handlePreviousCityClick(event) {
         event.preventDefault();
-        const previousCity = event.target;
-
-
-    })
+        const previousCityBtn = event.target.closest('.savedSearches');
+        if (previousCityBtn) {
+            const id = previousCityBtn.getAttribute('data-id');
+            const savedSearch = fiveDayArr.find(item => item.id === id);
+            if (savedSearch) {
+                createCurrentCard(savedSearch.data, savedSearch.city);
+                createFutureCards(savedSearch.data);
+            }
+    }
+}
+    
     function renderSavedData() {
         if(fiveDayArr.length > 0) {
             const latestCityData = fiveDayArr[0];
@@ -159,32 +163,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderSavedSearches() {
-        const previousSearchContainer = document.getElementById('cityClicked');
-        savedSearchContainer.innerHTML = ''; //clear previous buttons
+        const savedSearchesContainer = document.getElementById('savedSearches');
+        savedSearchesContainer.innerHTML = ''; // Clears any previous content
 
-        fiveDayArr.forEach(function(search) {
-            const searchedBtn = document.createElement('button');
-            searchedBtn.textContent = search.city; 
-            searchedBtn.dataset.id = search.id;
-            searchedBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600');
-            savedSearchContainer.appendChild(searchedBtn);
+        fiveDayArr.forEach(search => {
+            const searchBtnDiv = document.createElement('div');
+            const searchBtn = document.createElement('button');
+            searchBtn.textContent = search.city;
+            searchBtn.dataset.id = search.id;
+            searchBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600', 'previousSearch');
+            searchBtnDiv.appendChild(searchBtn);
+            savedSearchesContainer.appendChild(searchBtnDiv);
 
-            //add event listener to each rendered button
-            searchedBtn.addEventListener('click', event) {
-                event.preventDefault();
-                const savedSearch = fiveDayArr.find(function(item) {
-                    if (item.id === searchedBtn.dataset.id) {
-                        createCurrentCard(savedSearch.data, savedSearch.city);
-                        createFutureCards(savedSearch.data);
-                    }
-                });
-            }
-        });
-    }
+            // Add event listener to the search button
+            searchBtn.addEventListener('click', handlePreviousCityClick);
+    });
+}
 
     function init(){
         renderSavedData();
         renderSavedSearches();
+        cityEl.addEventListener('submit', handleSubmit)
     }
         
     init();
