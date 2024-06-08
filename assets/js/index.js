@@ -30,8 +30,8 @@ function search(city) {
 }
 
 function fiveDay(lat, lon, city) {
-    const APIKey = '1d06b7c740fb5f44ff9ef2d948306601';
-    const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`
+    const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
+    const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
     fetch(url)
         .then(function(resp) {
             return resp.json();
@@ -42,11 +42,13 @@ function fiveDay(lat, lon, city) {
             data.list.forEach((item, index) => {
                 if (index % 8 === 0) { // if the index number is exactly divisible by 8 (there are 8 indices for each day so we only need one, then take the info from that index)
                     const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
+                    const iconCode = item.weather[0].icon; //get icon code
+                    const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; //icon url
                     // newDate = item.dt.text
                     cityData.unshift({ 
                         city: city,
                         date: formatDate(item.dt_txt),
-                        emoji: item.weather[0].icon,
+                        iconUrl: iconUrl,
                         temp: tempF.toFixed(1), //rounds to one decimal place
                         wind: item.wind.speed,
                         humidity: item.main.humidity,
@@ -88,25 +90,23 @@ function renderSavedData(fiveDayArr) {
 
 function createFutureCards() {
     const futureContainerEl = document.getElementById('futureContainer');
-    Container.innerHTML - ''; //clears any previous content
+    futureContainerEl.innerHTML = ''; //clears any previous content
 
-    fiveDayArr.forEach(function(cityDataArray) {
-        const cityDiv = document.createElement('div');
-        cityDiv.classList.add('col-span-12', 'sm:col-span-3', 'p-4');
+    const cityDataArray = fiveDayArr[0] || [];
 
-        cityDataArray.forEach(function(item) {
-            const div = document.createElement('div');
-            div.classList.add('col-span-2', 'p-2', 'bg-cyan-600', 'rounded-md', 'shadow-md', 'shadow-cyan-500/50', 'mb-2');
-            div.innterHTML - `
+
+    cityDataArray.forEach(function(item) {
+        const div = document.createElement('div');
+        div.classList.add('col-span-2', 'p-2', 'bg-cyan-600', 'rounded-md', 'shadow-md', 'shadow-cyan-500/50', 'mb-2');
+        div.innerHTML = `
             <h3 class="font-bold mb-2">${item.date}</h3>
-            <p class="mb-1.5">${item.emoji}</p>
+            <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5">
             <p class="mb-1.5">Temp: ${item.temp} °F</p>
             <p class="mb-1.5">Wind: ${item.wind} MPH</p>
             <p class="mb-1.5">Humidity: ${item.humidity}%</p>
-            `;
-            container.appendedChild(div);
-        })
-    })
+        `;
+        futureContainerEl.appendChild(div);
+    });
 }
 
 
