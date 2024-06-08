@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
                         console.log(fiveDayArr);
 
-                        createFutureCards();
+                        createFutureCards(cityData);
                     });
             })
             .catch(function(error) {
@@ -114,15 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function createFutureCards() {
+    function createFutureCards(cityDataArray) {
         const futureContainerEl = document.getElementById('futureContainer');
-        // futureCardEl.innerHTML = ''; //clears any previous content
-        console.log(futureContainerEl);
+        futureContainerEl.innerHTML = ''; //clears any previous content
 
-        const cityDataArray = fiveDayArr[0] || [];
-
-
-        cityDataArray.forEach(function(item) {
+        //only render indices 1-5 since index 0 is the current day weather
+        for (let i = 2; i<=5 && i < cityDataArray.length; i++) {
+            const item = cityDataArray[i];
             const div = document.createElement('div');
             div.classList.add('col-span-2', 'p-2', 'bg-cyan-600', 'rounded-md', 'shadow-md', 'shadow-cyan-500/50', 'mb-2');
             div.innerHTML = `
@@ -133,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="mb-1.5">Humidity: ${item.humidity}%</p>
             `;
             futureContainerEl.appendChild(div);
-        });
+        }
     }
 
     function createCurrentCard(cityDataArray, city) {
@@ -162,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(fiveDayArr.length > 0) {
             const latestCityData = fiveDayArr[0];
             createCurrentCard(latestCityData, latestCityData[0].city);
-            createFutureCards();
+            createFutureCards(latestCityData);
         }
     }
 
