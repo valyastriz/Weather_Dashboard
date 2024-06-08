@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 createCurrentCard(cityData.data, city);
                 createFutureCards(cityData.data);
+                renderSavedSearches();
             })
             .catch(function(error) {
                 console.error("Error: ", error);
@@ -157,9 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-function init(){
-    renderSavedData();
-}
-    
-init();
+    function renderSavedSearches() {
+        const previousSearchContainer = document.getElementById('cityClicked');
+        savedSearchContainer.innerHTML = ''; //clear previous buttons
+
+        fiveDayArr.forEach(function(search) {
+            const searchedBtn = document.createElement('button');
+            searchedBtn.textContent = search.city; 
+            searchedBtn.dataset.id = search.id;
+            searchedBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600');
+            savedSearchContainer.appendChild(searchedBtn);
+
+            //add event listener to each rendered button
+            searchedBtn.addEventListener('click', event) {
+                event.preventDefault();
+                const savedSearch = fiveDayArr.find(function(item) {
+                    if (item.id === searchedBtn.dataset.id) {
+                        createCurrentCard(savedSearch.data, savedSearch.city);
+                        createFutureCards(savedSearch.data);
+                    }
+                });
+            }
+        });
+    }
+
+    function init(){
+        renderSavedData();
+        renderSavedSearches();
+    }
+        
+    init();
 });
