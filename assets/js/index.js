@@ -32,69 +32,68 @@ function search(city) {
 
 function fiveDay(lat, lon, city) {
     const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
-    const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    const urlCurrent = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    const urlCurrent = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    
     fetch(urlCurrent)
         .then(function(resp) {
             return resp.json();
         })
-        .then(function(currentData) {
-            console.log(currentData);
-
-            const currentTempF = (currentData.main.temp - 273.15) * 9/5 + 32; //convert from kelvin to F
-            const currentIconCode = currentData.weather[0].icon // get icon code
+        .then(function(currentData) {            
+            const currentTempF = (currentData.main.temp - 273.15) * 9/5 + 32; // Convert from Kelvin to Fahrenheit
+            const currentIconCode = currentData.weather[0].icon; // Get icon code
             const currentIconUrl = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`; // Construct icon URL
 
             let cityData = [{
                 city: city,
-                data: formatDate(currentData.dt * 1000), //convert unix to date
+                date: formatDate(currentData.dt * 1000), // Convert Unix timestamp to date
                 iconUrl: currentIconUrl,
-                temp: currentTempF.toFixed(1), //round to one decimal place
+                temp: currentTempF.toFixed(1), // Round to one decimal place
                 wind: currentData.wind.speed,
                 humidity: currentData.main.humidity
             }];
 
             return fetch(urlFive)
-            .then(function(fiveDayDataResp) {
-                fiveDayDataResp.json();
-            })
-            .then(function(fiveDayData) {
-                console.log(fiveDayData);
+                .then(function(fiveDayDataResp) {
+                    return fiveDayDataResp.json();
+                })
+                .then(function(fiveDayData) {
+                    fiveDayData.list.forEach((item, index) => {
+                        if (index % 8 === 0) { // Every 8th item
+                            const tempF = (item.main.temp - 273.15) * 9/5 + 32; // Convert Kelvin to Fahrenheit
+                            const iconCode = item.weather[0].icon; // Get icon code
+                            const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
 
-                fiveDayData.list.forEach((item, index) => {
-                    if (index % 8 === 0) { // if the index number is exactly divisible by 8 (there are 8 indices for each day so we only need one, then take the info from that index)
-                        const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
-                        const iconCode = item.weather[0].icon; //get icon code
-                        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; //icon url
-                        // newDate = item.dt.text
-                        cityData.unshift({ 
-                            city: city,
-                            date: formatDate(item.dt_txt),
-                            iconUrl: iconUrl,
-                            temp: tempF.toFixed(1), //rounds to one decimal place
-                            wind: item.wind.speed,
-                            humidity: item.main.humidity,
-                        });
-                    }
+                            cityData.push({
+                                city: city,
+                                date: formatDate(item.dt_txt),
+                                iconUrl: iconUrl,
+                                temp: tempF.toFixed(1), // Round to one decimal place
+                                wind: item.wind.speed,
+                                humidity: item.main.humidity
+                            });
+                        }
+                    });
+
+                    // Add new data to the beginning of the array using unshift
+                    fiveDayArr.unshift(cityData);
+
+                    // Ensure the array only stores the 5 latest searches
+                    // if (fiveDayArr.length > 5) {
+                    //     fiveDayArr = fiveDayArr.slice(0, 5);
+                    // }
+
+                    // Save to local storage
+                    localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
+                    console.log(fiveDayArr);
+
+                    createFutureCards();
                 });
-
-            })
+        })
+        .catch(function(error) {
+            console.error("Error: ", error);
         });
-            
-            //add new data to the bgeinning of the array using unshift
-            fiveDayArr.unshift(cityData);
-
-            //check make sure the array only stores the 5 latest searches so we don't use extra room 
-            if (fiveDayArr.length > 5) {
-                fiveDayArr = fiveDayArr.slice(0, 5);
-            }
-
-            //save to lcoal storage
-            localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
-            console.log(fiveDayArr);
-
-            createFutureCards();
-        };
+}
 
 
 function formatDate(dateString) {
