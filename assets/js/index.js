@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSavedData() {
         if(fiveDayArr.length > 0) {
             const latestCityData = fiveDayArr[0];
-            createCurrentCard(latestCityData, latestCityData[0].city);
+            createCurrentCard(latestCityData, latestCityData.city);
             createFutureCards(latestCityData);
         }
     }
@@ -169,7 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fiveDayArr.forEach(search => {
             const searchBtnDiv = document.createElement('div');
             const searchBtn = document.createElement('button');
-            searchBtn.textContent = search.city;
+            console.log(search);
+            searchBtnDiv.classList.add('mb-2');
+            searchBtn.textContent = search?.city;
             searchBtn.dataset.id = search.id;
             searchBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600', 'previousSearch');
             searchBtnDiv.appendChild(searchBtn);
