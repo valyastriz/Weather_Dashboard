@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cityEl = document.getElementById('cityInput');
     let fiveDayArr = JSON.parse(localStorage.getItem('fiveDayArr')) || []; //load from local storage or initialize an empty array
-    const cityClicked = document.getElementById('cityClicked');
-
 
 
     //handled the submit of the city search
@@ -155,10 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
 }
     
     function renderSavedData() {
+        let fiveDayArr = JSON.parse(localStorage.getItem('fiveDayArr')) || [];
         if(fiveDayArr.length > 0) {
-            const latestCityData = fiveDayArr[0];
-            createCurrentCard(latestCityData, latestCityData.city);
-            createFutureCards(latestCityData);
+            createCurrentCard(fiveDayArr[0].data, fiveDayArr[0].city);
+            createFutureCards(fiveDayArr[0].data);
         }
     }
 
@@ -166,27 +164,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedSearchesContainer = document.getElementById('savedSearches');
         savedSearchesContainer.innerHTML = ''; // Clears any previous content
 
-        fiveDayArr.forEach(search => {
-            const searchBtnDiv = document.createElement('div');
-            const searchBtn = document.createElement('button');
-            console.log(search);
-            searchBtnDiv.classList.add('mb-2');
-            searchBtn.textContent = search?.city;
-            searchBtn.dataset.id = search.id;
-            searchBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600', 'previousSearch');
-            searchBtnDiv.appendChild(searchBtn);
-            savedSearchesContainer.appendChild(searchBtnDiv);
+        const savedCities = [];
 
-            // Add event listener to the search button
-            searchBtn.addEventListener('click', handlePreviousCityClick);
+        fiveDayArr.forEach(search => {
+            
+            if (!savedCities.includes(search.city)) {
+                const searchBtnDiv = document.createElement('div');
+                const searchBtn = document.createElement('button');
+                console.log(search);
+                searchBtnDiv.classList.add('mb-2');
+                searchBtn.textContent = search?.city;
+                searchBtn.dataset.id = search.id;
+                searchBtn.classList.add('bg-gray-200', 'py-2', 'rounded', 'bg-slate-300', 'hover:bg-slate-500', 'hover:text-white', 'w-full', 'focus:outline-none', 'focus:ring', 'focus:ring-cyan-600', 'previousSearch');
+                searchBtnDiv.appendChild(searchBtn);
+                savedSearchesContainer.appendChild(searchBtnDiv);
+
+                savedCities.push(search.city);
+
+                // Add event listener to the search button
+                searchBtn.addEventListener('click', handlePreviousCityClick);
+
+            }
+            
     });
 }
 
-    function init(){
-        renderSavedData();
-        renderSavedSearches();
-        cityEl.addEventListener('submit', handleSubmit)
-    }
-        
-    init();
+    renderSavedData();
+    renderSavedSearches();
+    cityEl.addEventListener('submit', handleSubmit);
 });
