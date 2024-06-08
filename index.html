@@ -8,63 +8,66 @@
     <title>Weather Dashboard</title>
 </head>
 <body class="bg-gray-100">
+    <!--Header-->
     <div class="container">
-        <h1 class="bg-cyan-900 text-center text-white p-4 w-screen text-2xl">Weather Dashboard</h1>
+        <h1 class="bg-gradient-to-r from-cyan-900 to-cyan-300 text-center text-white p-4 w-screen text-2xl shadow-md shadow-cyan-500/50">Weather Dashboard</h1>
     </div>
-    <div class="container grid grid-cols-12 border-solid border-2 border-fuchsia-500 p-3 mx-auto">
-        <!--Sidebar-->
-        <div class="col-span-12 sm:col-span-3 bg-white border-solid border-2 border-cyan-800 p-4 ">
-            <div class="bg-white my-2">
+    <div class="container grid grid-cols-12 mx-auto">
+        <!--Right Sidebar - New and Previous searches-->
+        <div class="col-span-12 sm:col-span-3 p-4">
+            <div class="my-2">
                 <label class="block text-ray-700 text-lg font-bold mb-2" for="city">Search for a City: </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-blue-500 focus:shadow-outline" id="city" placeholder="San Antonio" type="text">
             </div>
             <hr class="my-2 border-2">
-            <button class="bg-gray-200 py-2 rounded bg-slate-200 hover:bg-slate-300 w-full">Test Saved City</button>
+            <button class="bg-gray-200 py-2 rounded bg-slate-300 hover:bg-slate-500 hover:text-white w-full focus:outline-none focus:ring focus:ring-cyan-600">Test Saved City</button>
         </div>
-        <div class="col-span-12 sm:col-span-9 border-solid border-2 border-pink-900">
-            <div class="container grid grid-cols-10 border-solid border-2 border-cyan-800 auto-rows-auto">
-                <div class="col-span-10 border-solid border-2 border-cyan-800 mt-3 rounded-md m-2 p-2">
+        <div class="col-span-12 sm:col-span-9">
+            <!--Today's Forecast-->
+            <div class="container grid grid-cols-10 auto-rows-auto">
+                <div class="col-span-10 border-solid border-2 border-cyan-800 mt-3 rounded-md m-2 p-2 bg-cyan-800 text-gray-200 shadow-md shadow-cyan-500/50">
                     <h2 class="text-lg font-bold mb-2">Atlanta (MM/DD/YYYY) Emoji</h2>
                     <p class="mb-1">Temp: </p>
                     <p class="mb-1">Wind: </p>
                     <p class="mb-1">Humidity: </p>
                 </div>
-                <div class="col-span-10 font-bold mx-2 border-solid border-2 border-cyan-800 mt-1 px-2">5 Day Forcast: </div>
+                <!--Future 5 day forecast-->
+                <div class="col-span-10 font-bold mx-2 mt-1 px-2">5 Day Forcast: </div>
                 <div class="m-2 gap-6 grid grid-cols-10 auto-rows-auto col-span-10 text-gray-200">
-                    <div class="col-span-2 border-solid border-2 border-cyan-800 p-2 bg-cyan-800">
-                        <h3 class="font-bold">MM/DD/YYYY</h3>
-                        <p>Emoji</p>
-                        <p class="mb-1">Temp: </p>
-                        <p class="mb-1">Wind: </p>
-                        <p class="mb-1">Humidity: </p>
+                    <div class="col-span-2 p-2 bg-cyan-600 rounded-md shadow-md shadow-cyan-500/50">
+                        <h3 class="font-bold mb-2">MM/DD/YYYY</h3>
+                        <p class="mb-1.5">Emoji</p>
+                        <p class="mb-1.5">Temp: </p>
+                        <p class="mb-1.5">Wind: </p>
+                        <p class="mb-1.5">Humidity: </p>
                     </div>
-                    <div class="col-span-2 border-solid border-2 border-cyan-800 p-2 p-2 bg-cyan-800">
-                        <h3 class="font-bold">MM/DD/YYYY</h3>
-                        <p>Emoji</p>
-                        <p class="mb-1">Temp: </p>
-                        <p class="mb-1">Wind: </p>
-                        <p class="mb-1">Humidity: </p>
+                    <div class="col-span-2 p-2 p-2 bg-cyan-600 rounded-md shadow-md shadow-cyan-500/50">
+                        <h3 class="font-bold mb-2">MM/DD/YYYY</h3>
+                        <p class="mb-1.5">Emoji</p>
+                        <p class="mb-1.5">Temp: </p>
+                        <p class="mb-1.5">Wind: </p>
+                        <p class="mb-1.5">Humidity: </p>
                     </div>
-                    <div class="col-span-2 border-solid border-2 border-cyan-800 p-2 p-2 bg-cyan-800">
-                        <h3 class="font-bold">MM/DD/YYYY</h3>
-                        <p>Emoji</p>
-                        <p class="mb-1">Temp: </p>
-                        <p class="mb-1">Wind: </p>
-                        <p class="mb-1">Humidity: </p>
+                    <div class="col-span-2 p-2 p-2 bg-cyan-600 rounded-md shadow-md shadow-cyan-500/50">
+                        <h3 class="font-bold mb-2">MM/DD/YYYY</h3>
+                        <p class="mb-1.5">Emoji</p>
+                        <p class="mb-1.5">Temp: </p>
+                        <p class="mb-1.5">Wind: </p>
+                        <p class="mb-1.5">Humidity: </p>
                     </div>
-                    <div class="col-span-2 border-solid border-2 border-cyan-800 p-2 p-2 bg-cyan-800">
-                        <h3 class="font-bold">MM/DD/YYYY</h3>
-                        <p>Emoji</p>
-                        <p class="mb-1">Temp: </p>
-                        <p class="mb-1">Wind: </p>
-                        <p class="mb-1">Humidity: </p>
+                    <div class="col-span-2 p-2 p-2 bg-cyan-600 rounded-md shadow-md shadow-cyan-500/50">
+                        <h3 class="font-bold mb-2">MM/DD/YYYY</h3>
+                        <p class="mb-1.5">Emoji</p>
+                        <p class="mb-1.5">Temp: </p>
+                        <p class="mb-1.5">Wind: </p>
+                        <p class="mb-1.5">Humidity: </p>
                     </div>
-                    <div class="col-span-2 border-solid border-2 border-cyan-800 p-2 p-2 bg-cyan-800">
-                        <h3 class="font-bold">MM/DD/YYYY</h3>
-                        <p>Emoji</p>
-                        <p class="mb-1">Temp: </p>
-                        <p class="mb-1">Wind: </p>
-                        <p class="mb-1">Humidity: </p>
+                    <div class="col-span-2 p-2 p-2 bg-cyan-600 rounded-md shadow-md shadow-cyan-500/50">
+                        <h3 class="font-bold mb-2">MM/DD/YYYY</h3>
+                        <p class="mb-1.5">Emoji</p>
+                        <p class="mb-1.5">Temp: </p>
+                        <p class="mb-1.5">Wind: </p>
+                        <p class="mb-1.5">Humidity: </p>
                     </div>
                 </div>
             </div>
