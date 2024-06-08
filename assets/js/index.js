@@ -7,6 +7,5 @@ function handleSubmit(event) {
     console.log(city);
 }
 
-
 //listener for the 'submit' on the city search
 cityEl.addEventListener('submit', handleSubmit)
