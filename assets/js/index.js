@@ -30,13 +30,14 @@ function search(city) {
 
 function fiveDay(lat, lon) {
     const APIKey = '1d06b7c740fb5f44ff9ef2d948306601';
-    const url = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${url}`
+    const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`
     fetch(url)
-        .then(function(data) {
+        .then(function(resp) {
             return resp.json();
         })
         .then(function(data) {
-            console.log(data);
+            let fiveDayArr = [];
+            
         })
     }
 
