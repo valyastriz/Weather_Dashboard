@@ -21,14 +21,14 @@ function search(city) {
     .then(function(data) {
         const lat = data[0].lat;
         const lon = data[0].lon;
-        fiveDay(lat, lon);
+        fiveDay(lat, lon, city);
     })
     .catch(function(error) {
         console.error("Error: ", error)
     });
 }
 
-function fiveDay(lat, lon) {
+function fiveDay(lat, lon, city) {
     const APIKey = '1d06b7c740fb5f44ff9ef2d948306601';
     const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`
     fetch(url)
@@ -43,6 +43,8 @@ function fiveDay(lat, lon) {
                     const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
                     // newDate = item.dt.text
                     fiveDayArr.push({
+                        // cityName: 
+                        city: city,
                         date: formatDate(item.dt_txt),
                         emoji: item.weather[0].icon,
                         temp: tempF.toFixed(1), //rounds to one decimal place
