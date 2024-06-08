@@ -65,7 +65,7 @@ function fiveDay(lat, lon, city) {
             localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
             console.log(fiveDayArr);
 
-            // renderSaveData();
+            createFutureCards();
         });
     }
 
@@ -82,7 +82,35 @@ function formatDate(dateString) {
     return `${month}/${day}/${year}`;
 }
 
+function renderSavedData(fiveDayArr) {
+
+}
+
+function createFutureCards() {
+    const futureContainerEl = document.getElementById('futureContainer');
+    Container.innerHTML - ''; //clears any previous content
+
+    fiveDayArr.forEach(function(cityDataArray) {
+        const cityDiv = document.createElement('div');
+        cityDiv.classList.add('col-span-12', 'sm:col-span-3', 'p-4');
+
+        cityDataArray.forEach(function(item) {
+            const div = document.createElement('div');
+            div.classList.add('col-span-2', 'p-2', 'bg-cyan-600', 'rounded-md', 'shadow-md', 'shadow-cyan-500/50', 'mb-2');
+            div.innterHTML - `
+            <h3 class="font-bold mb-2">${item.date}</h3>
+            <p class="mb-1.5">${item.emoji}</p>
+            <p class="mb-1.5">Temp: ${item.temp} °F</p>
+            <p class="mb-1.5">Wind: ${item.wind} MPH</p>
+            <p class="mb-1.5">Humidity: ${item.humidity}%</p>
+            `;
+            container.appendedChild(div);
+        })
+    })
+}
+
+
 //listener for the 'submit' on the city search
 cityEl.addEventListener('submit', handleSubmit)
 
-// document.addEventListener('DOMContentLoaded', renderSaveData);
+// document.addEventListener('DOMContentLoaded', renderSavedData);
