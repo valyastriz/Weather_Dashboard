@@ -140,17 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function handlePreviousCityClick(event) {
+        const cityClicked = (event.target.innerHTML);
         event.preventDefault();
-        const previousCityBtn = event.target.closest('.savedSearches');
-        if (previousCityBtn) {
-            const id = previousCityBtn.getAttribute('data-id');
-            const savedSearch = fiveDayArr.find(item => item.id === id);
-            if (savedSearch) {
-                createCurrentCard(savedSearch.data, savedSearch.city);
-                createFutureCards(savedSearch.data);
-            }
+        search(cityClicked);
     }
-}
     
     function renderSavedData() {
         let fiveDayArr = JSON.parse(localStorage.getItem('fiveDayArr')) || [];
