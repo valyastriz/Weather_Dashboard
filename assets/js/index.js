@@ -54,7 +54,7 @@ function fiveDay(lat, lon, city) {
                 }
             });
             //add new data to the bgeinning of the array using unshift
-            fiveDayArr.unshift(...cityData);
+            fiveDayArr.unshift(cityData);
 
             //check make sure the array only stores the 5 latest searches so we don't use extra room 
             if (fiveDayArr.length > 5) {
