@@ -53,6 +53,8 @@ function fiveDay(lat, lon, city) {
                 humidity: currentData.main.humidity
             }];
 
+            createCurrentCard(cityData, city);
+
             return fetch(urlFive)
                 .then(function(fiveDayDataResp) {
                     return fiveDayDataResp.json();
@@ -129,6 +131,24 @@ function createFutureCards() {
         `;
         futureContainerEl.appendChild(div);
     });
+}
+
+function createCurrentCard(cityDataArray, city) {
+    const currentCardEl = document.getElementById('currentCard');
+    currentCardEl.innerHTML = ''; //clears any previous content
+
+    if(cityDataArray.length > 0) {
+        const item = cityDataArray[0];
+        const currDiv = document.createElement('div');
+        currDiv.classList.add('col-span-10', 'border-solid', 'border-2', 'border-cyan-800', 'mt-3', 'rounded-md', 'm-2', 'p-2', 'bg-cyan-800', 'text-gray-200', 'shadow-md', 'shadow-cyan-500/50');
+        currDiv.innerHTML = `
+        <h2 class="text-lg font-bold mb-2">${city} ${item.date} <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5 w-12 h-12"></h2>
+        <p class="mb-1">Temp: ${item.temp} °F</p>
+        <p class="mb-1">Wind: ${item.wind} MPH</p>
+        <p class="mb-1">Humidity: ${item.humidity}%</p>
+        `;
+        currentCardEl.appendChild(currDiv);
+    }
 }
 
 
