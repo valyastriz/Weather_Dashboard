@@ -34,14 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fiveDay(lat, lon, city) {
         const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
+        const cnt = 6
+        //unable to use 16 day since it is a paid subscription
+        // const urlFive = `http://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=${cnt}&appid=${apiKey}`
+        // console.log(urlFive);
         const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+        console.log(urlFive);
         const urlCurrent = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         
         fetch(urlCurrent)
             .then(function(resp) {
                 return resp.json();
             })
-            .then(function(currentData) {            
+            .then(async function(currentData) {    
                 const currentTempF = (currentData.main.temp - 273.15) * 9/5 + 32; // Convert from Kelvin to Fahrenheit
                 const currentIconCode = currentData.weather[0].icon; // Get icon code
                 const currentIconUrl = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`; // Construct icon URL
@@ -57,42 +62,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 createCurrentCard(cityData, city);
 
-                return fetch(urlFive)
-                    .then(function(fiveDayDataResp) {
-                        return fiveDayDataResp.json();
-                    })
-                    .then(function(fiveDayData) {
-                        fiveDayData.list.forEach((item, index) => {
-                            if (index % 8 === 0) { // Every 8th item
-                                const tempF = (item.main.temp - 273.15) * 9/5 + 32; // Convert Kelvin to Fahrenheit
-                                const iconCode = item.weather[0].icon; // Get icon code
-                                const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
-
-                                cityData.push({
-                                    city: city,
-                                    date: formatDate(item.dt_txt),
-                                    iconUrl: iconUrl,
-                                    temp: tempF.toFixed(1), // Round to one decimal place
-                                    wind: item.wind.speed,
-                                    humidity: item.main.humidity
-                                });
-                            }
+                const fiveDayDataResp = await fetch(urlFive);
+                const fiveDayData = await fiveDayDataResp.json();
+                console.log(fiveDayData);
+                let dates = [];
+                fiveDayData.list.forEach((item) => {
+                    if(!dates.includes(item.dt_txt.split(" ")[0])){
+                        dates.push(item.dt_txt.split(" ")[0]);
+                        const tempF = (item.main.temp - 273.15) * 9 / 5 + 32; // Convert Kelvin to Fahrenheit
+                        const iconCode = item.weather[0].icon; // Get icon code
+                        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
+                        cityData.push({
+                            city: city,
+                            date: formatDate(item.dt_txt),
+                            iconUrl: iconUrl,
+                            temp: tempF.toFixed(1), // Round to one decimal place
+                            wind: item.wind.speed,
+                            humidity: item.main.humidity
                         });
+                    }
+                });
+                console.log('City Data', cityData);
+                // Add new data to the beginning of the array using unshift
+                fiveDayArr.unshift(cityData);
 
-                        // Add new data to the beginning of the array using unshift
-                        fiveDayArr.unshift(cityData);
-
-                        // Ensure the array only stores the 5 latest searches
-                        // if (fiveDayArr.length > 5) {
-                        //     fiveDayArr = fiveDayArr.slice(0, 5);
-                        // }
-
-                        // Save to local storage
-                        localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
-                        console.log(fiveDayArr);
-
-                        createFutureCards(cityData);
-                    });
+                // Save to local storage
+                localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
+                // console.log(fiveDayArr);
+                createFutureCards(cityData);
             })
             .catch(function(error) {
                 console.error("Error: ", error);
