@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(cityDataArray.length > 0) {
             const item = cityDataArray[0];
             const currDiv = document.createElement('div');
-            currDiv.classList.add('col-span-10', 'border-solid', 'border-2', 'border-cyan-800', 'mt-3', 'rounded-md', 'm-2', 'p-2', 'bg-cyan-800', 'text-gray-200', 'shadow-md', 'shadow-cyan-500/50');
+            currDiv.classList.add('border-solid', 'border-2', 'border-cyan-800', 'mt-3', 'rounded-md', 'm-2', 'p-2', 'bg-cyan-800', 'text-gray-200', 'shadow-md', 'shadow-cyan-500/50');
             currDiv.innerHTML = `
             <h2 class="text-lg font-bold mb-2">${city} ${item.date} <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5 w-12 h-12"></h2>
             <p class="mb-1">Temp: ${item.temp} °F</p>
