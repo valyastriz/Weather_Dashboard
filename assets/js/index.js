@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const citySearchId = crypto.randomUUID(); //generate an id for each city search
 
         const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+        const urlToday = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         
         fetch(urlFive)
             .then(function(resp) {
@@ -49,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     city: city,
                     data: []
                 };
-
+                let resp = await fetch(urlToday);
+                let todaysForcast = await resp.json();
+                fiveDayData.list.unshift({...todaysForcast, dt_txt: formatDate(todaysForcast.dt * 1000)});
+                
                 let dates = [];
                 fiveDayData.list.forEach((item) => {
                     if(!dates.includes(item.dt_txt.split(" ")[0])){
@@ -100,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFutureCards(cityDataArray) {
         const futureContainerEl = document.getElementById('futureContainer');
         futureContainerEl.innerHTML = ''; //clears any previous content
-
         //only render indices 1-5 since index 0 is the current day weather
         for (let i = 1; i<=6 && i < cityDataArray.length; i++) {
             const item = cityDataArray[i];
@@ -145,6 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
         search(cityClicked);
     }
     
+    // function handleCityDelete(event) {
+    //     event.preventDefault();
+    //     const elementId = event.target.
+    // }
     function renderSavedData() {
         let fiveDayArr = JSON.parse(localStorage.getItem('fiveDayArr')) || [];
         if(fiveDayArr.length > 0) {
@@ -164,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!savedCities.includes(search.city)) {
                 const searchBtnDiv = document.createElement('div');
                 const searchBtn = document.createElement('button');
-                console.log(search);
                 searchBtnDiv.classList.add('mb-2');
                 searchBtn.textContent = search?.city;
                 searchBtn.dataset.id = search.id;
