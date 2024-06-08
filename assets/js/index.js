@@ -6,6 +6,7 @@ function handleSubmit(event) {
     event.preventDefault();
     const city = document.getElementById('city').value;
     search(city);
+    document.getElementById('city').value = '';
 }
 
 function search(city) {
@@ -31,30 +32,55 @@ function search(city) {
 
 function fiveDay(lat, lon, city) {
     const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
-    const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    fetch(url)
+    const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    const urlCurrent = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    fetch(urlCurrent)
         .then(function(resp) {
             return resp.json();
         })
-        .then(function(data) {
-            console.log(data);
-            let cityData = [];
-            data.list.forEach((item, index) => {
-                if (index % 8 === 0) { // if the index number is exactly divisible by 8 (there are 8 indices for each day so we only need one, then take the info from that index)
-                    const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
-                    const iconCode = item.weather[0].icon; //get icon code
-                    const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; //icon url
-                    // newDate = item.dt.text
-                    cityData.unshift({ 
-                        city: city,
-                        date: formatDate(item.dt_txt),
-                        iconUrl: iconUrl,
-                        temp: tempF.toFixed(1), //rounds to one decimal place
-                        wind: item.wind.speed,
-                        humidity: item.main.humidity,
-                    });
-                }
-            });
+        .then(function(currentData) {
+            console.log(currentData);
+
+            const currentTempF = (currentData.main.temp - 273.15) * 9/5 + 32; //convert from kelvin to F
+            const currentIconCode = currentData.weather[0].icon // get icon code
+            const currentIconUrl = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`; // Construct icon URL
+
+            let cityData = [{
+                city: city,
+                data: formatDate(currentData.dt * 1000), //convert unix to date
+                iconUrl: currentIconUrl,
+                temp: currentTempF.toFixed(1), //round to one decimal place
+                wind: currentData.wind.speed,
+                humidity: currentData.main.humidity
+            }];
+
+            return fetch(urlFive)
+            .then(function(fiveDayDataResp) {
+                fiveDayDataResp.json();
+            })
+            .then(function(fiveDayData) {
+                console.log(fiveDayData);
+
+                fiveDayData.list.forEach((item, index) => {
+                    if (index % 8 === 0) { // if the index number is exactly divisible by 8 (there are 8 indices for each day so we only need one, then take the info from that index)
+                        const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
+                        const iconCode = item.weather[0].icon; //get icon code
+                        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; //icon url
+                        // newDate = item.dt.text
+                        cityData.unshift({ 
+                            city: city,
+                            date: formatDate(item.dt_txt),
+                            iconUrl: iconUrl,
+                            temp: tempF.toFixed(1), //rounds to one decimal place
+                            wind: item.wind.speed,
+                            humidity: item.main.humidity,
+                        });
+                    }
+                });
+
+            })
+        });
+            
             //add new data to the bgeinning of the array using unshift
             fiveDayArr.unshift(cityData);
 
@@ -68,8 +94,8 @@ function fiveDay(lat, lon, city) {
             console.log(fiveDayArr);
 
             createFutureCards();
-        });
-    }
+        };
+
 
 function formatDate(dateString) {
     //create date object from date input string
@@ -84,9 +110,6 @@ function formatDate(dateString) {
     return `${month}/${day}/${year}`;
 }
 
-function renderSavedData(fiveDayArr) {
-
-}
 
 function createFutureCards() {
     const futureContainerEl = document.getElementById('futureContainer');
