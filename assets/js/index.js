@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fiveDay(lat, lon, city) {
         const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
-        const cnt = 6
+        const citySearchId = crypto.randonUUID(); //generate an id for each city search
 
         const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         
@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return resp.json();
             })
             .then(async function(fiveDayData) {    
-                let cityData = [];
+                let cityData = {
+                    id: citySearchId,
+                    city: city,
+                    data: []
+                };
 
                 let dates = [];
                 fiveDayData.list.forEach((item) => {
@@ -55,14 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         const tempF = (item.main.temp - 273.15) * 9 / 5 + 32; // Convert Kelvin to Fahrenheit
                         const iconCode = item.weather[0].icon; // Get icon code
                         const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
-                        cityData.push({
+                        cityData.data.push({
                             city: city,
                             date: formatDate(item.dt_txt),
                             iconUrl: iconUrl,
                             temp: tempF.toFixed(1), // Round to one decimal place
                             wind: item.wind.speed,
                             humidity: item.main.humidity,
-                            id: crypto.randomUUID()
                         });
                     }
                 });
@@ -72,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save to local storage
                 localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
 
-                createCurrentCard(cityData, city);
-                createFutureCards(cityData);
+                createCurrentCard(cityData.data, city);
+                createFutureCards(cityData.data);
             })
             .catch(function(error) {
                 console.error("Error: ", error);
@@ -113,7 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             futureContainerEl.appendChild(div);
         }
+        
     }
+    
 
     function createCurrentCard(cityDataArray, city) {
         const currentCardEl = document.getElementById('currentCard');
@@ -123,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = cityDataArray[0];
             const currDiv = document.createElement('div');
             currDiv.classList.add('border-solid', 'border-2', 'border-cyan-800', 'mt-3', 'rounded-md', 'm-2', 'p-2', 'bg-cyan-800', 'text-gray-200', 'shadow-md', 'shadow-cyan-500/50');
+            currDiv.dataset.id = item.id;
             currDiv.innerHTML = `
             <h2 class="text-lg font-bold mb-2">${city} ${item.date} <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5 w-12 h-12"></h2>
             <p class="mb-1">Temp: ${item.temp} °F</p>
@@ -137,7 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
     //listener for the 'submit' on the city search
     cityEl.addEventListener('submit', handleSubmit)
 
-    cityClicked.
+    cityClicked.addEventListener('click', function(event){
+        event.preventDefault();
+        const previousCity = event.target;
+
+
+    })
     function renderSavedData() {
         if(fiveDayArr.length > 0) {
             const latestCityData = fiveDayArr[0];
