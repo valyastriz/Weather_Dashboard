@@ -100,7 +100,7 @@ function createFutureCards() {
         div.classList.add('col-span-2', 'p-2', 'bg-cyan-600', 'rounded-md', 'shadow-md', 'shadow-cyan-500/50', 'mb-2');
         div.innerHTML = `
             <h3 class="font-bold mb-2">${item.date}</h3>
-            <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5">
+            <img src="${item.iconUrl}" alt="Weather Icon" class="mb-1.5 w-12 h-12">
             <p class="mb-1.5">Temp: ${item.temp} °F</p>
             <p class="mb-1.5">Wind: ${item.wind} MPH</p>
             <p class="mb-1.5">Humidity: ${item.humidity}%</p>
