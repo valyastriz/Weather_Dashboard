@@ -1,4 +1,5 @@
 const cityEl = document.getElementById('cityInput');
+let fiveDayArr = JSON.parse(localStorage.getItem('fiveDayArr')) || []; //load from local storage or initialize an empty array
 
 //handled the submit of the city search
 function handleSubmit(event) {
@@ -37,13 +38,12 @@ function fiveDay(lat, lon, city) {
         })
         .then(function(data) {
             console.log(data);
-            let fiveDayArr = [];
+            let cityData = [];
             data.list.forEach((item, index) => {
                 if (index % 8 === 0) { // if the index number is exactly divisible by 8 (there are 8 indices for each day so we only need one, then take the info from that index)
                     const tempF = (item.main.temp - 273.15) * 9/5 + 32; // converting from kelvin to farenhight
                     // newDate = item.dt.text
-                    fiveDayArr.push({
-                        // cityName: 
+                    cityData.unshift({ 
                         city: city,
                         date: formatDate(item.dt_txt),
                         emoji: item.weather[0].icon,
@@ -53,7 +53,19 @@ function fiveDay(lat, lon, city) {
                     });
                 }
             });
+            //add new data to the bgeinning of the array using unshift
+            fiveDayArr.unshift(...cityData);
+
+            //check make sure the array only stores the 5 latest searches so we don't use extra room 
+            if (fiveDayArr.length > 5) {
+                fiveDayArr = fiveDayArr.slice(0, 5);
+            }
+
+            //save to lcoal storage
+            localStorage.setItem('fiveDayArr', JSON.stringify(fiveDayArr));
             console.log(fiveDayArr);
+
+            // renderSaveData();
         });
     }
 
@@ -72,3 +84,5 @@ function formatDate(dateString) {
 
 //listener for the 'submit' on the city search
 cityEl.addEventListener('submit', handleSubmit)
+
+// document.addEventListener('DOMContentLoaded', renderSaveData);
