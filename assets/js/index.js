@@ -52,11 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 let resp = await fetch(urlToday);
                 let todaysForcast = await resp.json();
-                fiveDayData.list.unshift({...todaysForcast, dt_txt: formatDate(todaysForcast.dt * 1000)});
+                todaysForcast = {
+                    ...todaysForcast,
+                    dt_txt: formatDate(todaysForcast.dt * 1000)
+                }
+                fiveDayData.list.unshift(todaysForcast);
                 
                 let dates = [];
                 fiveDayData.list.forEach((item) => {
-                    if(!dates.includes(item.dt_txt.split(" ")[0])){
+                    if(!dates.includes(item.dt_txt.split(" ")[0]) ){
+                        console.log(formatDate(item.dt_txt.split(" ")[0]), todaysForcast.dt_txt);
                         dates.push(item.dt_txt.split(" ")[0]);
                         const tempF = (item.main.temp - 273.15) * 9 / 5 + 32; // Convert Kelvin to Fahrenheit
                         const iconCode = item.weather[0].icon; // Get icon code
@@ -71,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     }
                 });
+                if(cityData.data[0].date == cityData.data[1].date){cityData.data = cityData.data.splice(1);}
                 // Add new data to the beginning of the array using unshift
                 fiveDayArr.unshift(cityData);
 
