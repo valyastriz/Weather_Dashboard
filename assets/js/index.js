@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
-        const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`;
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`;
         fetch(url)
         .then(function(resp) {
             return resp.json();
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiKey = '1d06b7c740fb5f44ff9ef2d948306601';
         const citySearchId = crypto.randomUUID(); //generate an id for each city search
 
-        const urlFive = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+        const urlFive = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         const urlToday = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
         
         fetch(urlFive)
