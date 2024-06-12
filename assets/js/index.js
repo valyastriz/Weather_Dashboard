@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         dates.push(item.dt_txt.split(" ")[0]);
                         const tempF = (item.main.temp - 273.15) * 9 / 5 + 32; // Convert Kelvin to Fahrenheit
                         const iconCode = item.weather[0].icon; // Get icon code
-                        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
+                        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Construct icon URL
                         cityData.data.push({
                             city: city,
                             date: formatDate(item.dt_txt),
